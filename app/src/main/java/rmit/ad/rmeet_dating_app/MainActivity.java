@@ -1,12 +1,16 @@
 package rmit.ad.rmeet_dating_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -15,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<String> al;
     private ArrayAdapter<String> arrayAdapter;
+    private ConstraintLayout logout;
+    FirebaseAuth mAuth;
     private int i;
 
 
@@ -86,6 +92,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        logout = findViewById(R.id.logoutBtn);
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                Intent intent = new Intent(MainActivity.this, ChoosingLoginRegistrationActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
 }
