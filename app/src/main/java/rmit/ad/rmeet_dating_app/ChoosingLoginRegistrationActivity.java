@@ -7,9 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class ChoosingLoginRegistrationActivity extends AppCompatActivity {
 
     private TextView loginBtn, registrationBtn;
+    FirebaseAuth mAuth;
+    FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,6 +22,13 @@ public class ChoosingLoginRegistrationActivity extends AppCompatActivity {
 
         loginBtn = findViewById(R.id.login);
         registrationBtn = findViewById(R.id.registration);
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+
+        if(user != null) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
