@@ -16,12 +16,8 @@ public class ChoosingLoginRegistrationActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseUser user;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choosing_login_registration);
-
-        loginBtn = findViewById(R.id.login);
-        registrationBtn = findViewById(R.id.registration);
+    public void onStart(){
+        super.onStart();
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
@@ -29,6 +25,14 @@ public class ChoosingLoginRegistrationActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_choosing_login_registration);
+
+        loginBtn = findViewById(R.id.login);
+        registrationBtn = findViewById(R.id.registration);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
