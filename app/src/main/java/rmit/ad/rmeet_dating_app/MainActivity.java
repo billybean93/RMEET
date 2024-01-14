@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private cards cards_data;
     private arrayAdapter arrayAdapter;
-    private ConstraintLayout logout;
+    private ConstraintLayout logout, setting;
     private int i;
     private String userSex, oppositeUserSex, currentUserId;
 
@@ -114,6 +114,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(MainActivity.this, ChoosingLoginRegistrationActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        setting = findViewById(R.id.settingBtn);
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                intent.putExtra("userSex", userSex);
                 startActivity(intent);
                 finish();
             }
