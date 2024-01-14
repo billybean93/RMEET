@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 if (snapshot.exists() && !snapshot.child("connection").child("nope").hasChild(currentUserId) && !snapshot.child("connection").child("yeps").hasChild(currentUserId)) {
-                    cards item = new cards(snapshot.getKey(), Objects.requireNonNull(snapshot.child("name").getValue()).toString());
+                    cards item = new cards(snapshot.getKey(), Objects.requireNonNull(snapshot.child("name").getValue()).toString(), Objects.requireNonNull(snapshot.child("profileImageUrl").getValue()).toString());
                     rowItems.add(item);
                     arrayAdapter.notifyDataSetChanged();
                 }

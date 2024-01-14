@@ -3,10 +3,12 @@ package rmit.ad.rmeet_dating_app;
 public class cards {
     private String userId;
     private String name;
+    private String profileImageUrl;
 
-    public cards(String userId, String name) {
+    public cards(String userId, String name, String profileImageUrl) {
         this.userId = userId;
         this.name = name;
+        this.profileImageUrl = profileImageUrl;
     }
 
     public String getUserId() {
@@ -16,6 +18,9 @@ public class cards {
     public String getName() {
         return name;
     }
+    public String getprofileImageUrl() {
+        return profileImageUrl;
+    }
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -23,5 +28,8 @@ public class cards {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public void setprofileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }

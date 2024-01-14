@@ -9,12 +9,11 @@
     <com.lorentzos.flingswipe.SwipeFlingAdapterView
         android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="500dp"
         android:background="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:rotation_degrees="15.5"
-        tools:context=".MainActivity"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="-16dp" />
+        tools:context=".MainActivity" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/logoutBtn"
@@ -81,6 +80,5 @@
             app:srcCompat="@drawable/baseline_settings_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
