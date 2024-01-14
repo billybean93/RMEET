@@ -113,9 +113,17 @@ public class SettingsActivity extends AppCompatActivity {
                         educationyear = map.get("education year").toString();
                         educationyearField.setText(educationyear);
                     }
+                    Glide.clear(ProfileImg);
                     if (map.get("profileImageUrl") != null) {
                         profileImageUrl = map.get("profileImageUrl").toString();
-                        Glide.with(getApplication()).load(profileImageUrl).into(ProfileImg);
+                        switch (profileImageUrl) {
+                            case "default":
+                                Glide.with(getApplication()).load(R.mipmap.ic_launcher).into(ProfileImg);
+                                break;
+                            default:
+                                Glide.with(getApplication()).load(profileImageUrl).into(ProfileImg);
+                                break;
+                        }
                     }
                 }
             }

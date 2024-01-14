@@ -20,6 +20,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RegistrationActivity extends AppCompatActivity {
 
     private EditText email, password, name;
@@ -79,8 +82,11 @@ public class RegistrationActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     String userId = mAuth.getCurrentUser().getUid();
-                                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(radioButton.getText().toString()).child(userId).child("name");
-                                    databaseReference.setValue(n);
+                                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(radioButton.getText().toString()).child(userId).child(userId);
+                                    Map userInfo = new HashMap<>();
+                                    userInfo.put("name", name);
+                                    userInfo.put("profileImageUrl", "default");
+                                    databaseReference.updateChildren(userInfo);
 
                                     Toast.makeText(RegistrationActivity.this, "Authentication created.", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
