@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 cards obj = (cards) dataObject;
                 String userId = obj.getUserId();
                 userDb.child(oppositeUserSex).child(userId).child("connection").child("yeps").child(currentUserId).setValue(true);
+                isConnectionMatch(userId);
                 Toast.makeText(MainActivity.this, "right", Toast.LENGTH_SHORT).show();
             }
 
@@ -114,6 +116,25 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ChoosingLoginRegistrationActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+    }
+
+    public void isConnectionMatch(String userId){
+        DatabaseReference currentUserConnection = userDb.child(userSex).child(currentUserId).child("connection").child("yeps").child(userId);
+        currentUserConnection.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Toast.makeText(MainActivity.this, "New connection", Toast.LENGTH_SHORT).show();
+                    userDb.child(oppositeUserSex).child(snapshot.getKey()).child("connection").child("matches").child(currentUserId).setValue(true);
+                    userDb.child(userSex).child(currentUserId).child("connection").child("matches").child(snapshot.getKey()).setValue(true);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "283294070146",
+    "project_id": "rmeet-cc900",
+    "storage_bucket": "rmeet-cc900.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:283294070146:android:d834d2337ce9bc35db8b9b",
+        "android_client_info": {
+          "package_name": "rmit.ad.rmeet_dating_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWF_81RjVm770uxtG2id0asVqRFQfmEw4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
