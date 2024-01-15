@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         setting = findViewById(R.id.settingBtn);
         setting.setOnClickListener(new View.OnClickListener() {
             @Override

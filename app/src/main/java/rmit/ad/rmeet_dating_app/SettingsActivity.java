@@ -113,7 +113,7 @@ public class SettingsActivity extends AppCompatActivity {
                         educationyear = map.get("education year").toString();
                         educationyearField.setText(educationyear);
                     }
-                    Glide.clear(ProfileImg);
+                    //Glide.clear(ProfileImg);
                     if (map.get("profileImageUrl") != null) {
                         profileImageUrl = map.get("profileImageUrl").toString();
                         switch (profileImageUrl) {

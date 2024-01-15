@@ -29,6 +29,7 @@ public class cards {
     public void setName(String name) {
         this.name = name;
     }
+
     public void setprofileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }

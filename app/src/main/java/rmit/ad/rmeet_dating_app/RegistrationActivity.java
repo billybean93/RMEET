@@ -82,11 +82,9 @@ public class RegistrationActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     String userId = mAuth.getCurrentUser().getUid();
-                                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(radioButton.getText().toString()).child(userId).child(userId);
-                                    Map userInfo = new HashMap<>();
-                                    userInfo.put("name", name);
-                                    userInfo.put("profileImageUrl", "default");
-                                    databaseReference.updateChildren(userInfo);
+                                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(radioButton.getText().toString()).child(userId);
+                                    databaseReference.child("name").setValue(name);
+                                    databaseReference.child("profileImageUrl").setValue("default");
 
                                     Toast.makeText(RegistrationActivity.this, "Authentication created.", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
