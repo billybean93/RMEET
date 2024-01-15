@@ -1,4 +1,4 @@
-package rmit.ad.rmeet_dating_app;
+package rmit.ad.rmeet_dating_app.Cards;
 
 public class cards {
     private String userId;

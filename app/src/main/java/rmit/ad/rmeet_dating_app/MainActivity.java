@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,10 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import rmit.ad.rmeet_dating_app.Cards.arrayAdapter;
+import rmit.ad.rmeet_dating_app.Cards.cards;
+
 public class MainActivity extends AppCompatActivity {
 
     private cards cards_data;
-    private arrayAdapter arrayAdapter;
+    private rmit.ad.rmeet_dating_app.Cards.arrayAdapter arrayAdapter;
     private ConstraintLayout logout, setting;
     private int i;
     private String userSex, oppositeUserSex, currentUserId;

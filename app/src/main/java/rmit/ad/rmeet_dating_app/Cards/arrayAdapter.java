@@ -1,4 +1,4 @@
-package rmit.ad.rmeet_dating_app;
+package rmit.ad.rmeet_dating_app.Cards;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
+
+import rmit.ad.rmeet_dating_app.R;
 
 public class arrayAdapter extends ArrayAdapter<cards> {
     Context context;
