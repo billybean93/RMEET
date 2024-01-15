@@ -30,7 +30,7 @@ public class cards {
         this.name = name;
     }
 
-    public void setprofileImageUrl(String profileImageUrl) {
+    public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }
 }
