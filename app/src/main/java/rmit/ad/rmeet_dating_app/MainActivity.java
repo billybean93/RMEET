@@ -129,11 +129,9 @@ public class MainActivity extends AppCompatActivity {
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 intent.putExtra("userSex", userSex);
                 startActivity(intent);
-                finish();
             }
         });
     }
@@ -282,8 +280,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToMatches(View view){
         Intent intent = new Intent(MainActivity.this, MatchesActivity.class);
+        intent.putExtra("userSex", userSex);
         startActivity(intent);
-        return;
     }
 
 }

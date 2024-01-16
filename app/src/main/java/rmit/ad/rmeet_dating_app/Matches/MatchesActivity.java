@@ -16,6 +16,7 @@ import rmit.ad.rmeet_dating_app.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MatchesActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
@@ -23,15 +24,16 @@ public class MatchesActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mMatchesLayoutManager;
 
     private String cusrrentUserID;
+    String userSex = Objects.requireNonNull(getIntent().getExtras()).getString("userSex");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matches);
 
-        cusrrentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        cusrrentUserID = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setHasFixedSize(true);
         mMatchesLayoutManager = new LinearLayoutManager(MatchesActivity.this);
@@ -41,15 +43,11 @@ public class MatchesActivity extends AppCompatActivity {
 
         getUserMatchId();
 
-
-
-
-
     }
 
-    private void getUserMatchId() {
+    public void getUserMatchId() {
 
-        DatabaseReference matchDb = FirebaseDatabase.getInstance().getReference().child("Users").child(cusrrentUserID).child("connections").child("matches");
+        DatabaseReference matchDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userSex).child(cusrrentUserID).child("connection").child("matches");
         matchDb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -67,8 +65,14 @@ public class MatchesActivity extends AppCompatActivity {
         });
     }
 
-    private void FetchMatchInformation(String key) {
-        DatabaseReference userDb = FirebaseDatabase.getInstance().getReference().child("Users").child(key);
+    public void FetchMatchInformation(String key) {
+        String sex;
+        if (Objects.equals(userSex, "Male")) {
+            sex = "Female";
+        } else {
+            sex = "Male";
+        }
+        DatabaseReference userDb = FirebaseDatabase.getInstance().getReference().child("Users").child(sex).child(key);
         userDb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -82,7 +86,6 @@ public class MatchesActivity extends AppCompatActivity {
                     if(dataSnapshot.child("profileImageUrl").getValue()!=null){
                         profileImageUrl = dataSnapshot.child("profileImageUrl").getValue().toString();
                     }
-
 
                     MatchesObject obj = new MatchesObject(userId, name, profileImageUrl);
                     resultsMatches.add(obj);
@@ -98,8 +101,8 @@ public class MatchesActivity extends AppCompatActivity {
 
     }
 
-    private ArrayList<MatchesObject> resultsMatches = new ArrayList<MatchesObject>();
-    private List<MatchesObject> getDataSetMatches() {
+    public ArrayList<MatchesObject> resultsMatches = new ArrayList<MatchesObject>();
+    public List<MatchesObject> getDataSetMatches() {
         return resultsMatches;
     }
 

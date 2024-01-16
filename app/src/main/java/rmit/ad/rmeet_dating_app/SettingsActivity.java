@@ -1,5 +1,9 @@
 package rmit.ad.rmeet_dating_app;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +19,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,6 +41,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 public class SettingsActivity extends AppCompatActivity {
     private EditText nameField, phoneField, ageField, certificateField, educationyearField;
@@ -46,32 +53,38 @@ public class SettingsActivity extends AppCompatActivity {
     private String userId, name, phone, age, certificate, educationyear, profileImageUrl;
     private Uri resultUri;
 
+    ActivityResultLauncher<Intent> activityResultLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        String userSex = getIntent().getExtras().getString("userSex");
+        String userSex = Objects.requireNonNull(getIntent().getExtras()).getString("userSex");
         nameField = findViewById(R.id.name);
         phoneField = findViewById(R.id.phone);
         ageField = findViewById(R.id.age);
         certificateField = findViewById(R.id.certificate);
         educationyearField = findViewById(R.id.educationyear);
+
         ProfileImg = findViewById(R.id.profileImg);
         confirm = findViewById(R.id.confirmBtn);
         back = findViewById(R.id.backBtn);
         mAuth = FirebaseAuth.getInstance();
-        userId = mAuth.getCurrentUser().getUid();
-        mCustomerDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Customers").child(userId);
+        userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        mCustomerDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userSex).child(userId);
         getUserInfo();
+
+        registerResult();
         ProfileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
-                startActivityForResult(intent, 1);
+                activityResultLauncher.launch(intent);
             }
         });
+
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +112,7 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                     if (map.get("phone") != null) {
                         phone = map.get("phone").toString();
-                        phoneField.setText(name);
+                        phoneField.setText(phone);
                     }
                     if (map.get("age") != null) {
                         age = map.get("age").toString();
@@ -110,19 +123,18 @@ public class SettingsActivity extends AppCompatActivity {
                         certificateField.setText(certificate);
                     }
                     if (map.get("educationyear") != null) {
-                        educationyear = map.get("education year").toString();
+                        educationyear = map.get("educationyear").toString();
                         educationyearField.setText(educationyear);
                     }
                     //Glide.clear(ProfileImg);
                     if (map.get("profileImageUrl") != null) {
                         profileImageUrl = map.get("profileImageUrl").toString();
-                        switch (profileImageUrl) {
-                            case "default":
-                                Glide.with(getApplication()).load(R.mipmap.ic_launcher).into(ProfileImg);
-                                break;
-                            default:
-                                Glide.with(getApplication()).load(profileImageUrl).into(ProfileImg);
-                                break;
+                        if (profileImageUrl.equals("default")) {
+                            ProfileImg.setImageResource(R.mipmap.ic_launcher);
+                        } else {
+                            Glide.with(getApplication())
+                                    .load(profileImageUrl)
+                                    .into(ProfileImg);
                         }
                     }
                 }
@@ -141,15 +153,15 @@ public class SettingsActivity extends AppCompatActivity {
         certificate = certificateField.getText().toString();
         educationyear = educationyearField.getText().toString();
 
-        Map userInfo = new HashMap();
-        userInfo.put("name", name);
-        userInfo.put("phone", phone);
-        userInfo.put("age", age);
-        userInfo.put("certificate", certificate);
-        userInfo.put("educationyear", educationyear);
-        mCustomerDatabase.updateChildren(userInfo);
+        mCustomerDatabase.child("name").setValue(name);
+        mCustomerDatabase.child("phone").setValue(phone);
+        mCustomerDatabase.child("age").setValue(age);
+        mCustomerDatabase.child("certificate").setValue(certificate);
+        mCustomerDatabase.child("educationyear").setValue(educationyear);
+
         if (resultUri != null) {
-            StorageReference filepath = FirebaseStorage.getInstance().getReference().child("profileImages").child(userId);
+            String filepart = "image/" + UUID.randomUUID().toString();
+            StorageReference reference = FirebaseStorage.getInstance().getReference().child(filepart);
             Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), resultUri);
@@ -157,9 +169,9 @@ public class SettingsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] data = baos.toByteArray();
-            UploadTask uploadTask = filepath.putBytes(data);
+            UploadTask uploadTask = reference.putBytes(data);
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
@@ -182,13 +194,21 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 1 && resultCode == Activity.RESULT_OK) {
-            final Uri imageUri = data.getData();
-            resultUri = imageUri;
-            ProfileImg.setImageURI(resultUri);
-        }
+    private void registerResult() {
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult o) {
+                        if (o.getData() != null) {
+                            Uri urlimg = o.getData().getData();
+                            resultUri = urlimg;
+                            ProfileImg.setImageURI(urlimg);
+                        } else {
+                            Toast.makeText(SettingsActivity.this, "No Image chosen", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+        );
     }
 }

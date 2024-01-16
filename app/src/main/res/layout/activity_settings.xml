@@ -11,15 +11,15 @@
         android:id="@+id/profileImg"
         android:layout_width="200sp"
         android:layout_height="200sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="20sp"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
         app:srcCompat="@drawable/baseline_person_24" />
 
     <EditText
         android:id="@+id/name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20sp"
@@ -28,7 +28,7 @@
     <EditText
         android:id="@+id/phone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20sp"
@@ -37,7 +37,7 @@
     <EditText
         android:id="@+id/age"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20sp"
@@ -46,7 +46,7 @@
     <EditText
         android:id="@+id/certificate"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20sp"
@@ -55,7 +55,7 @@
     <EditText
         android:id="@+id/educationyear"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20sp"
