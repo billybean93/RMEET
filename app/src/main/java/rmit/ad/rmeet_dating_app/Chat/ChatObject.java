@@ -9,6 +9,7 @@ public class ChatObject {
     }
 
     public String getMessage(){
+
         return message;
     }
 
@@ -21,6 +22,7 @@ public class ChatObject {
     }
 
     public void setCurrentUser(){
+
         this.currentUser= currentUser;
     }
 }
