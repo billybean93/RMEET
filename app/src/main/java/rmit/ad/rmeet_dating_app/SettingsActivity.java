@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -31,11 +32,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
 import java.net.URI;
@@ -88,7 +92,7 @@ public class SettingsActivity extends AppCompatActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveUserInformation();
+                saveUserInformation(resultUri);
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
@@ -130,11 +134,30 @@ public class SettingsActivity extends AppCompatActivity {
                     if (map.get("profileImageUrl") != null) {
                         profileImageUrl = map.get("profileImageUrl").toString();
                         if (profileImageUrl.equals("default")) {
-                            ProfileImg.setImageResource(R.mipmap.ic_launcher);
+                            ProfileImg.setImageResource(R.drawable.baseline_person_24);
                         } else {
-                            Glide.with(getApplication())
-                                    .load(profileImageUrl)
-                                    .into(ProfileImg);
+                            StorageReference storageReference = FirebaseStorage.getInstance().getReference(profileImageUrl);
+                            try {
+                                File localfile = File.createTempFile("tempfile", ".jpg");
+                                storageReference.getFile(localfile)
+                                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                                        Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
+                                                        ProfileImg.setImageBitmap(bitmap);
+//                                                        Glide.with(getApplication())
+//                                                                .load(profileImageUrl)
+//                                                                .into(ProfileImg);
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+
+                                            }
+                                        });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
@@ -146,7 +169,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
-    private void saveUserInformation() {
+    private void saveUserInformation(Uri img) {
         name = nameField.getText().toString();
         phone = phoneField.getText().toString();
         age = ageField.getText().toString();
@@ -162,31 +185,17 @@ public class SettingsActivity extends AppCompatActivity {
         if (resultUri != null) {
             String filepart = "image/" + UUID.randomUUID().toString();
             StorageReference reference = FirebaseStorage.getInstance().getReference().child(filepart);
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), resultUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] data = baos.toByteArray();
-            UploadTask uploadTask = reference.putBytes(data);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    finish();
-                }
-            });
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            reference.putFile(img).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Uri downloadUrl = taskSnapshot.getUploadSessionUri();
-                    Map userInfo = new HashMap();
-                    userInfo.put("profileImageUrl", downloadUrl.toString());
-                    mCustomerDatabase.updateChildren(userInfo);
+                    Toast.makeText(SettingsActivity.this, "Image upload successfully!!", Toast.LENGTH_SHORT).show();
+                    mCustomerDatabase.child("profileImageUrl").setValue(filepart);
                     finish();
-                    return;
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(SettingsActivity.this, "Image upload failed!!", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
