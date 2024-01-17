@@ -15,8 +15,7 @@
         android:theme="@style/Theme.RMEET_dating_app"
         tools:targetApi="31">
         <activity
-            android:name=".Matches.MatchesActivity"
-            android:exported="true"/>
+            android:name=".Matches.MatchesActivity" />
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />

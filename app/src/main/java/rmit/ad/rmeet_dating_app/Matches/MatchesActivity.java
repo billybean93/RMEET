@@ -24,7 +24,7 @@ public class MatchesActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mMatchesLayoutManager;
 
     private String currentUserID;
-    String userSex = Objects.requireNonNull(getIntent().getExtras()).getString("userSex");
+    String userSex;
     public ArrayList<MatchesObject> resultsMatches = new ArrayList<>();
 
     @Override
@@ -42,8 +42,13 @@ public class MatchesActivity extends AppCompatActivity {
         mMatchesAdapter = new MatchesAdapter(getDataSetMatches(), MatchesActivity.this);
         mRecyclerView.setAdapter(mMatchesAdapter);
 
-        getUserMatchId();
-
+        // Check if userSex is not null before using it
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("userSex")) {
+            userSex = getIntent().getExtras().getString("userSex");
+            getUserMatchId();
+        } else {
+            // Handle the case when userSex is null (show a message, log an error, etc.)
+        }
     }
 
     public void getUserMatchId() {
@@ -60,6 +65,10 @@ public class MatchesActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()){
                     for(DataSnapshot match : dataSnapshot.getChildren()){
                         FetchMatchInformation(match.getKey());
+                        String matchKey = match.getKey();
+                        if (matchKey != null) {  // Check if the key is not null
+                            FetchMatchInformation(matchKey);
+                        }
                     }
                 }
             }
