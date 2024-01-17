@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     private cards cards_data;
     private rmit.ad.rmeet_dating_app.Cards.arrayAdapter arrayAdapter;
-    private ConstraintLayout logout, setting;
+    private ConstraintLayout logout, setting, matches;
     private int i;
     private String userSex, oppositeUserSex, currentUserId;
 
@@ -130,6 +130,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                intent.putExtra("userSex", userSex);
+                startActivity(intent);
+            }
+        });
+
+        matches = findViewById(R.id.matchesBtn);
+        matches.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MatchesActivity.class);
                 intent.putExtra("userSex", userSex);
                 startActivity(intent);
             }
@@ -278,10 +288,5 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void goToMatches(View view){
-        Intent intent = new Intent(MainActivity.this, MatchesActivity.class);
-        intent.putExtra("userSex", userSex);
-        startActivity(intent);
-    }
 
 }

@@ -23,15 +23,16 @@ public class MatchesActivity extends AppCompatActivity {
     private RecyclerView.Adapter mMatchesAdapter;
     private RecyclerView.LayoutManager mMatchesLayoutManager;
 
-    private String cusrrentUserID;
+    private String currentUserID;
     String userSex = Objects.requireNonNull(getIntent().getExtras()).getString("userSex");
+    public ArrayList<MatchesObject> resultsMatches = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matches);
 
-        cusrrentUserID = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        currentUserID = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setNestedScrollingEnabled(false);
@@ -47,7 +48,12 @@ public class MatchesActivity extends AppCompatActivity {
 
     public void getUserMatchId() {
 
-        DatabaseReference matchDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userSex).child(cusrrentUserID).child("connection").child("matches");
+        DatabaseReference matchDb = FirebaseDatabase.getInstance().getReference()
+                .child("Users")
+                .child(userSex)
+                .child(currentUserID)
+                .child("connection")
+                .child("matches");
         matchDb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -101,8 +107,8 @@ public class MatchesActivity extends AppCompatActivity {
 
     }
 
-    public ArrayList<MatchesObject> resultsMatches = new ArrayList<MatchesObject>();
     public List<MatchesObject> getDataSetMatches() {
+
         return resultsMatches;
     }
 

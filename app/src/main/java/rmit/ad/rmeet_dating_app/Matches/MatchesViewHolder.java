@@ -23,6 +23,7 @@ public class MatchesViewHolder extends RecyclerView.ViewHolder implements View.O
         mMatchImage = (ImageView) itemView.findViewById(R.id.MatchImage);
     }
 
+
     public void onClick(View view){
         Intent intent = new Intent(view.getContext(), ChatActivity.class);
         Bundle b = new Bundle();
