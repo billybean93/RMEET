@@ -3,6 +3,8 @@ package rmit.ad.rmeet_dating_app.Matches;
 import android.os.Bundle;
 import android.content.Intent;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,11 +26,12 @@ public class MatchesViewHolder extends RecyclerView.ViewHolder implements View.O
     }
 
 
-    public void onClick(View view){
+    public void onClick(View view) {
         Intent intent = new Intent(view.getContext(), ChatActivity.class);
         Bundle b = new Bundle();
         b.putString("matchId", mMatchId.getText().toString());
         intent.putExtras(b);
+        Log.d("MatchesViewHolder", "onClick: matchId = " + mMatchId.getText().toString());
         view.getContext().startActivity(intent);
     }
 }
