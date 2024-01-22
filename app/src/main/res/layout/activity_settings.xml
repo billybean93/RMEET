@@ -14,7 +14,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20sp"
-        app:srcCompat="@drawable/baseline_person_24" />
+        app:srcCompat="@drawable/person" />
 
     <EditText
         android:id="@+id/name"
@@ -23,7 +23,9 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20sp"
-        android:hint="name" />
+        android:inputType="textPersonName"
+        android:backgroundTint="@color/light_red"
+        android:hint="Name" />
 
     <EditText
         android:id="@+id/phone"
@@ -32,7 +34,9 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20sp"
-        android:hint="phone" />
+        android:inputType="number"
+        android:backgroundTint="@color/light_red"
+        android:hint="Phone" />
 
     <EditText
         android:id="@+id/age"
@@ -41,7 +45,9 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20sp"
-        android:hint="age" />
+        android:inputType="number"
+        android:backgroundTint="@color/light_red"
+        android:hint="Age" />
 
     <EditText
         android:id="@+id/certificate"
@@ -50,7 +56,9 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20sp"
-        android:hint="certificate" />
+        android:inputType="textPersonName"
+        android:backgroundTint="@color/light_red"
+        android:hint="Certificate" />
 
     <EditText
         android:id="@+id/educationyear"
@@ -59,7 +67,9 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20sp"
-        android:hint="education year" />
+        android:inputType="textPersonName"
+        android:backgroundTint="@color/light_red"
+        android:hint="Education year" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
