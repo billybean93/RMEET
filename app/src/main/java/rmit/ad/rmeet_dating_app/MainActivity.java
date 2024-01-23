@@ -6,10 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
     private String userSex, oppositeUserSex, currentUserId;
 
     private DatabaseReference userDb;
+
+    ImageView logOutIcon;
+
+    TextView logOutText;
 
     ListView listView;
     List<cards> rowItems;
@@ -120,6 +127,32 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(MainActivity.this,
                         ChoosingLoginRegistrationActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        logOutIcon = findViewById(R.id.imageView3);
+
+        logOutIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(MainActivity.this,
+                ChoosingLoginRegistrationActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        logOutText = findViewById(R.id.textView3);
+
+        logOutText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(MainActivity.this,
+                ChoosingLoginRegistrationActivity.class);
                 startActivity(intent);
                 finish();
             }
