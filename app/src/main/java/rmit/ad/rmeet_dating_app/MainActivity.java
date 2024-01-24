@@ -9,12 +9,15 @@ import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -37,18 +40,16 @@ public class MainActivity extends AppCompatActivity {
 
     private cards cards_data;
     private rmit.ad.rmeet_dating_app.Cards.arrayAdapter arrayAdapter;
-    private ConstraintLayout logout, setting, matches;
+    private ConstraintLayout logout, setting;
     private int i;
     private String userSex, oppositeUserSex, currentUserId;
 
     private DatabaseReference userDb;
 
-    ImageView logOutIcon;
-
-    TextView logOutText;
-
     ListView listView;
     List<cards> rowItems;
+
+    private BottomNavigationView nav1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,49 +133,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        logOutIcon = findViewById(R.id.imageView3);
 
-        logOutIcon.setOnClickListener(new View.OnClickListener() {
+        nav1 = findViewById(R.id.nav1);
+
+        nav1.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(MainActivity.this,
-                ChoosingLoginRegistrationActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
 
-        logOutText = findViewById(R.id.textView3);
+                if (id == R.id.home) {
+                    return true;
+                } else if (id == R.id.profile) {
+                    Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                    intent.putExtra("userSex", userSex);
+                    startActivity(intent);
+                    return true;
+                } else if (id == R.id.matches) {
+                    Intent intent = new Intent(MainActivity.this, MatchesActivity.class);
+                    intent.putExtra("userSex", userSex);
+                    startActivity(intent);
+                    return true;
+                }
 
-        logOutText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(MainActivity.this,
-                ChoosingLoginRegistrationActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        setting = findViewById(R.id.settingBtn);
-        setting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                intent.putExtra("userSex", userSex);
-                startActivity(intent);
-            }
-        });
-
-        matches = findViewById(R.id.matchesBtn);
-        matches.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MatchesActivity.class);
-                intent.putExtra("userSex", userSex);
-                startActivity(intent);
+                return false;
             }
         });
     }
