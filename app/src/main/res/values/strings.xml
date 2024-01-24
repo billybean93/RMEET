@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RMEET_dating_app</string>
+    <string name="app_name">RMEET</string>
     <string name="name">Name</string>
     <string name="registration">Registration</string>
     <string name="email">Email</string>
