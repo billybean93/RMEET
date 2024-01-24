@@ -2,6 +2,7 @@ package rmit.ad.rmeet_dating_app.Chat;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,11 +45,27 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("matchId")) {
+            matchId = getIntent().getExtras().getString("matchId");
+            Log.d("ChatActivity", "onCreate: matchId = " + matchId);
+        } else {
+            // Handle the case when matchId is null
+            finish(); // Close the activity if matchId is not provided
+        }
+
+        currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users")
+                .child(currentUserID).child("connections").child("matches").child(matchId).child("ChatId");
+        mDatabaseChat = FirebaseDatabase.getInstance().getReference().child("Chat");
+
+        getChatId();
+
         matchId = getIntent().getExtras().getString("matchId");
 
         currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID).child("connections").child("matches").child(matchId).child("ChatId");
+        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID).child("connection").child("matches").child(matchId).child("ChatId");
         mDatabaseChat = FirebaseDatabase.getInstance().getReference().child("Chat");
 
         getChatId();
@@ -100,10 +117,11 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                // Handle error if needed
             }
         });
     }
+
 
     private void getChatMessages() {
         mDatabaseChat.addChildEventListener(new ChildEventListener() {

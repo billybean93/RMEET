@@ -64,7 +64,6 @@ public class MatchesActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     for(DataSnapshot match : dataSnapshot.getChildren()){
-                        FetchMatchInformation(match.getKey());
                         String matchKey = match.getKey();
                         if (matchKey != null) {  // Check if the key is not null
                             FetchMatchInformation(matchKey);
@@ -95,14 +94,20 @@ public class MatchesActivity extends AppCompatActivity {
                     String userId = dataSnapshot.getKey();
                     String name = "";
                     String profileImageUrl = "";
-                    if(dataSnapshot.child("name").getValue()!=null){
+                    String chatId = "";
+
+                    if(dataSnapshot.child("name").getValue() != null){
                         name = dataSnapshot.child("name").getValue().toString();
                     }
-                    if(dataSnapshot.child("profileImageUrl").getValue()!=null){
+                    if(dataSnapshot.child("profileImageUrl").getValue() != null){
                         profileImageUrl = dataSnapshot.child("profileImageUrl").getValue().toString();
                     }
+                    if(dataSnapshot.child("connection").child("ChatId").getValue() != null){
+                        chatId = dataSnapshot.child("connection").child("ChatId").getValue().toString();
+                    }
 
-                    MatchesObject obj = new MatchesObject(userId, name, profileImageUrl);
+                    MatchesObject obj = new MatchesObject(userId, name, profileImageUrl, chatId);
+
                     resultsMatches.add(obj);
                     mMatchesAdapter.notifyDataSetChanged();
                 }
@@ -110,10 +115,9 @@ public class MatchesActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                // Handle error if needed
             }
         });
-
     }
 
     public List<MatchesObject> getDataSetMatches() {
